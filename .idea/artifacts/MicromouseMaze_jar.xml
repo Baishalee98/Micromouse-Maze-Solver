@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MicromouseMaze:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MicromouseMaze_jar</output-path>
+    <root id="archive" name="MicromouseMaze.jar">
+      <element id="module-output" name="MicromouseMaze" />
+    </root>
+  </artifact>
+</component>
