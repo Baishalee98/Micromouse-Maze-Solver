@@ -65,6 +65,11 @@ public class Controller implements Initializable {
 	Cell[][] clickableSquares;
 
 
+	//for finding path using BFS
+	Queue<Integer> queue = new LinkedList<>();
+
+
+
 
 	public void createPlayground(){
 		Shape outerRectangle = createGameStructuralGrid();
@@ -113,7 +118,9 @@ public class Controller implements Initializable {
 
 				if (flagBlock) flagBlock = false;
 				if (StartPresent && GoalPresent) {
-					findKeys(GoalXIndex, GoalYIndex);
+					queue.add(GoalXIndex);
+					queue.add(GoalYIndex);
+					findKeys();
 					findPath(StartXIndex, StartYIndex, "", path);
 					drawPath();
 					PathSet = true;
@@ -158,6 +165,8 @@ public class Controller implements Initializable {
 		}
 	}
 
+
+	//Finds path after alloting keys to cells
 	private void findPath(int robx, int roby, String s, List<Integer> path) {
 		path.add(robx);
 		path.add(roby);
@@ -289,6 +298,7 @@ public class Controller implements Initializable {
 
 	}
 
+	/*
 	private void findKeys(int x,int y) {
 		if (clickableSquares[x][y].key == -2)return;
 		if(x>0 && y>=0){
@@ -319,6 +329,58 @@ public class Controller implements Initializable {
 		}
 	}
 
+	 */
+
+
+	//Alloting keys to cells using BFS
+	private void findKeys() {
+		while(!queue.isEmpty()){
+			int x=queue.poll();
+			int y=queue.poll();
+
+			if(x>0 && y>=0){
+				if(clickableSquares[x-1][y].key == -1 || clickableSquares[x-1][y].key > clickableSquares[x][y].key+1){
+
+					clickableSquares[x-1][y].key = clickableSquares[x][y].key+1;
+
+					queue.add(x-1);
+					queue.add(y);
+				}
+			}
+
+			if(x>=0 && y>0){
+				if(clickableSquares[x][y-1].key==-1 || clickableSquares[x][y-1].key>clickableSquares[x][y].key+1){
+					clickableSquares[x][y-1].key=clickableSquares[x][y].key+1;
+
+					queue.add(x);
+					queue.add(y-1);
+				}
+			}
+			if(x<ROWS-1 && y<COLUMNS){
+				if(clickableSquares[x+1][y].key==-1 || clickableSquares[x+1][y].key>clickableSquares[x][y].key+1){
+					clickableSquares[x+1][y].key=clickableSquares[x][y].key+1;
+
+					queue.add(x+1);
+					queue.add(y);
+				}
+			}
+			if(x<ROWS && y<COLUMNS-1){
+				if(clickableSquares[x][y+1].key==-1 || clickableSquares[x][y+1].key>clickableSquares[x][y].key+1){
+					clickableSquares[x][y+1].key=clickableSquares[x][y].key+1;
+
+					queue.add(x);
+					queue.add(y+1);
+				}
+			}
+
+		}
+
+	}
+
+
+
+
+	//If goal not set, show alert
 	private void alertGoalNotPresent() {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle("Error occurred");
@@ -327,6 +389,7 @@ public class Controller implements Initializable {
 		alert.show();
 	}
 
+	//If start not set, show alert
 	private void alertStartNotPresent() {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle("Error occurred");
@@ -334,6 +397,8 @@ public class Controller implements Initializable {
 		alert.setContentText("Set the Start position and try to run again");
 		alert.show();
 	}
+
+
 
 	private Cell[][] createClickableCells() {
 		Cell[][] clickableCells= new Cell[ROWS][COLUMNS];
