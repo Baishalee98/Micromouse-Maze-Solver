@@ -166,7 +166,7 @@ public class Controller implements Initializable {
 	}
 
 
-	//Finds path after alloting keys to cells
+	//Finds path after allotting keys to cells
 	private void findPath(int robx, int roby, String s, List<Integer> path) {
 		path.add(robx);
 		path.add(roby);
@@ -332,7 +332,7 @@ public class Controller implements Initializable {
 	 */
 
 
-	//Alloting keys to cells using BFS
+	//Allotting keys to cells using BFS
 	private void findKeys() {
 		while(!queue.isEmpty()){
 			int x=queue.poll();
